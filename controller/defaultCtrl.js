@@ -4,14 +4,14 @@ const mongoose = require('mongoose');
 
 const home = (req, res)=>{
     res.status(201);
-    res.send("Practise Api");
+    res.send("Registration Api");
 };
 
 const health = async (req, res) => { 
 try {
     await mongoose.connect(config.dbConStr);
     res.status(201);
-    res.json({ db:'up'});
+    res.json({ db:'Up'});
 } catch (e) { 
     console.log(e);
     res.status(500);

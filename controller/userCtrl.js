@@ -3,7 +3,6 @@ const userRepo = require('../repo/userRepo');
 const register = async (req, res)=>{
     try{
         const data = req.body;
-        data.d4 = Date.now();
         await userRepo.add(data);
         res.status(201);
         res.json("data added");
@@ -31,19 +30,41 @@ const result = async(req, res) =>
     }
 };
 
-const deleteData = async(req, res) =>
-{
-    try{
-        const email= req.params.email;
-        await userRepo.deleteData(email);
-        res.status(201);
-        res.json();
-    }catch(e){
+const getUsers = async (req, res) => {
+    try {
+        const pageIndex = +req.params.page;
+        const pageSize = +req.params.size;
+        const totalRecords = await userRepo.getUserCount();
+        const totalPages = Math.ceil(totalRecords / pageSize);
+        const users = await userRepo.getUsers(pageIndex, pageSize);
+
+        const response = {
+            data: users,
+            metadata: {
+                totalRecords: totalRecords,
+                totalPages: totalPages
+            }
+        };
+        res.status(200);
+        res.json(response);
+    } catch (e) {
         console.log(e);
-        res.status(500);
-        res.json("cant show");
+        res.status(500).send('Internal Server Error');
     }
-};
+}
+// const deleteData = async(req, res) =>
+// {
+//     try{
+//         const email= req.params.email;
+//         await userRepo.deleteData(email);
+//         res.status(201);
+//         res.json();
+//     }catch(e){
+//         console.log(e);
+//         res.status(500);
+//         res.json("cant show");
+//     }
+// };
 
 const update = async (req, res) => {
     try {
@@ -84,5 +105,5 @@ const cntusr = async(req,res) =>{
         res.status(500).json("internal Server Error");
     }
 }
-
-module.exports = {register, result, getData, update, deleteData, cntusr };
+// deleteData,
+module.exports = {register, result, getData, update,  cntusr, getUsers };
