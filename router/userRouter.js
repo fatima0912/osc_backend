@@ -24,9 +24,11 @@ const router = express.Router();
 router.post('/register', userCtrl.register);
 router.get('/', userCtrl.result);
 router.get('/count',userCtrl.cntusr);
+router.post('/login', userCtrl.login);
 router.get('/:email', userCtrl.getData);
 router.put('/:email',basicAuth, userCtrl.update);
 router.get('/page/:page/size/:size', userCtrl.getUsers);
+router.get('/allusers', userCtrl.result)
 //router.put('/:email',upload.single('image'), userCtrl.update);
 // router.delete('/:email', userCtrl.deleteData);
 

@@ -6,9 +6,12 @@ const mongoose = require('mongoose');
 const config = require('./config/index');
 const defaultRouter = require('./router/defaultRouter');
 const userRouter = require('./router/userRouter');
+const cors = require('cors');
+
 // const defaultCtrl = require('./controller/defaultCtrl.js');
 const port = 3000;
 //const port = process.env.PORT || 3000;
+app.use(cors());
 
  app.listen(port, () => {
     console.log(`Server is running on ${port}`)

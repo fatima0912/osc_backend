@@ -23,14 +23,17 @@ const schema = mongoose.Schema( {
         }
     },
     password: {
-        type:String,
-        required: [true, 'Password is required'],
-        validate: {
-            validator: v => /^[a-z0-9\.@#\$%&]+$/.test(v),
-            message: () => 'Invalid Password Pattern'        
+         type:String
+        //  validate: {
+        //      validator: v => /^[a-z0-9\.@#\$%&]+$/.test(v),
+        //      message: () => 'Invalid Password Pattern'        
 
-                },
-            }
+        //          },
+            },
+    uid: {
+        type: String,
+        unique: true
+    }
 
 }
 );

@@ -1,11 +1,31 @@
 const userRepo = require('../repo/userRepo');
+const cryptoUtils =require('../utils/cryptoUtils')
+
+const pwd = () => {
+    let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    let pass_length = 8;
+    pass =""
+
+    for (let i = 0; i < pass_length; i++) {
+        var rnum = Math.floor(Math.random() * chars.length);
+        pass += chars.substring(rnum, rnum +1) 
+    }
+    return pass;
+}
+
 
 const register = async (req, res)=>{
     try{
         const data = req.body;
+        const uid = data.firstName + Math.round(Math.random() * 10000)
+        data['uid'] = uid
+        let pd = await pwd();
+        
+        const en = await cryptoUtils.getHash(pd)
+        data['password'] = en;
         await userRepo.add(data);
         res.status(201);
-        res.json("data added");
+        res.json({uid: uid, pwd: pd});
     }
     catch(err){
         console.log(err);
@@ -66,6 +86,24 @@ const getUsers = async (req, res) => {
 //     }
 // };
 
+
+const login = async (req, res) => {
+    const payload = req.body;
+    const dbUser = await userRepo.getData(payload.uid);
+    if (!dbUser) {
+        res.status(401).send("Unauthorized");
+        return;
+    }
+    const result = await cryptoUtils.compare(payload.password, dbUser.password);
+    if (result) {
+        // const token = cryptoUtils.getToken(dbUser);
+        res.status(200).send("Logged In!");
+    } else {
+        res.status(401);
+        res.send("Unauthorized");
+    }
+}
+
 const update = async (req, res) => {
     try {
         const email= req.params.email;
@@ -106,4 +144,4 @@ const cntusr = async(req,res) =>{
     }
 }
 // deleteData,
-module.exports = {register, result, getData, update,  cntusr, getUsers };
+module.exports = {register, result, getData, update,  cntusr, getUsers, login };
