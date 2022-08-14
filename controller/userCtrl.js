@@ -7,7 +7,7 @@ const pwd = () => {
     pass =""
 
     for (let i = 0; i < pass_length; i++) {
-        var rnum = Math.floor(Math.random() * chars.length);
+        let rnum = Math.floor(Math.random() * chars.length);
         pass += chars.substring(rnum, rnum +1) 
     }
     return pass;
@@ -19,21 +19,19 @@ const register = async (req, res)=>{
         const data = req.body;
         const uid = data.firstName + Math.round(Math.random() * 10000)
         data['uid'] = uid
-        let pd = await pwd();
         
+        let pd = await pwd();
         const en = await cryptoUtils.getHash(pd)
         data['password'] = en;
+        
         await userRepo.add(data);
         res.status(201);
         res.json({uid: uid, pwd: pd});
-    }
-    catch(err){
+    }catch(err){
         console.log(err);
         res.status(500);
         res.send("Intenal Server Error");
     }
-    
-
 };
 
 const result = async(req, res) =>
@@ -46,7 +44,7 @@ const result = async(req, res) =>
     }catch(e){
         console.log(e);
         res.status(500);
-        res.send("cant show");
+        res.send("Internal Server");
     }
 };
 
@@ -72,19 +70,6 @@ const getUsers = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 }
-// const deleteData = async(req, res) =>
-// {
-//     try{
-//         const email= req.params.email;
-//         await userRepo.deleteData(email);
-//         res.status(201);
-//         res.json();
-//     }catch(e){
-//         console.log(e);
-//         res.status(500);
-//         res.json("cant show");
-//     }
-// };
 
 
 const login = async (req, res) => {
@@ -96,23 +81,11 @@ const login = async (req, res) => {
     }
     const result = await cryptoUtils.compare(payload.password, dbUser.password);
     if (result) {
-        // const token = cryptoUtils.getToken(dbUser);
+        
         res.status(200).send("Logged In!");
     } else {
         res.status(401);
         res.send("Unauthorized");
-    }
-}
-
-const update = async (req, res) => {
-    try {
-        const email= req.params.email;
-        await userRepo.update(email, req.body);
-         //console.log(req.body);
-        res.status(204);
-        res.send();
-    } catch (e) {
-        res.status(500).send('Internal Server Error');
     }
 }
 
@@ -124,16 +97,6 @@ const update = async (req, res) => {
     .catch(err => res.status(500).send('Internal Server Error'));
 };
 
- // res.status(201);
-    // res.send(getdt);
-   
-// catch(e)
-//     {
-//         console.log(e);
-//     res.status(500);
-//     res.send("Internal Server Error");
-// }
-// };
 
 const cntusr = async(req,res) =>{
     try{
@@ -143,5 +106,14 @@ const cntusr = async(req,res) =>{
         res.status(500).json("internal Server Error");
     }
 }
-// deleteData,
-module.exports = {register, result, getData, update,  cntusr, getUsers, login };
+
+module.exports = {
+                register, 
+                result, 
+                getData, 
+                cntusr, 
+                getUsers, 
+                login 
+                };
+
+

@@ -20,26 +20,10 @@ const getUsers = (pageIndex, pageSize) => {
         .limit(pageSize);
 };
 
-const update = (email, data) => {
-    const {  firstName, lastName, gender, age, mobile } = data;
-    return practiceModel.updateOne({ email }, {
-        $set: {
-            firstName,
-            lastName, 
-            gender, 
-            age, 
-            mobile
-        }
-    });
-};
-
 const getData =(uid)=>{
     return practiceModel.findOne({uid: uid});
     
-    // or
-    // const projection = {__v:0, __id:0};
-    // const filter = {email};
-    // return practiceModel.findOne(filter, projection);
+   
 };
 
 const getUserCount = () => {
@@ -47,15 +31,24 @@ const getUserCount = () => {
 }
 
 
-// const deleteData = (email)=>{
-//    return practiceModel.findOneAndDelete({email: email});
-//     // return practiceModel.save();
-// } 
-// deleteData
 module.exports= { add,
                   show,
                   getData, 
-                  update,
                   getUserCount,
                   getUsers 
                 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

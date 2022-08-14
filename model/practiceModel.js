@@ -1,5 +1,3 @@
-
-
 const mongoose = require('mongoose');
 
 const schema = mongoose.Schema( { 
@@ -22,14 +20,7 @@ const schema = mongoose.Schema( {
             message: () => 'Invalid Email'
         }
     },
-    password: {
-         type:String
-        //  validate: {
-        //      validator: v => /^[a-z0-9\.@#\$%&]+$/.test(v),
-        //      message: () => 'Invalid Password Pattern'        
-
-        //          },
-            },
+    password:String,
     uid: {
         type: String,
         unique: true
